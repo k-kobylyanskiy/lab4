@@ -87,7 +87,6 @@ public class Field extends JPanel implements Runnable {
                 if(!(point.getPixel_x() > 135 && point.getPixel_x() < 300 &&
                         point.getPixel_y() > 30 && point.getPixel_y() < 300) && wasIn){
                     animation = true;
-                    System.out.println("NOOOOO, ANIMATION");
                 }
 
                 if (animation) {
@@ -130,9 +129,6 @@ public class Field extends JPanel implements Runnable {
 
     Field(){
 
-        //t = new Thread(this, "1");
-        //t.start();
-
         rLabels = new ArrayList<>();
 
         r1 = new JLabel("-R");
@@ -160,11 +156,6 @@ public class Field extends JPanel implements Runnable {
         this.add(r2);
         this.add(r3);
         this.add(r4);
-        //for (int i = 0; i < 8; i++){
-        //    this.add(rLabels.get(i));
-        //}
-
-        //rLabels.stream().forEach(label -> this.add(label));
 
         coordinates = new JLabel("(0;0)");
         this.add(coordinates);

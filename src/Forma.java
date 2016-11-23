@@ -3,25 +3,11 @@ public class Forma {
         if (x > 0 && y > 0) {
             return false;
         } else if (x < 0 && y > 0) {
-            if (x >= -R/2 && y <= R) {
-                return true;
-            } else {
-                return false;
-            }
+            return (x >= -R/2 && y <= R);
         } else if (x <= 0 && y <= 0) {
-            if (x * x + y * y <= R * R/4) {
-                return true;
-            } else {
-                return false;
-            }
+            return (x * x + y * y <= R * R/4);
         } else {
-            if (y >= x - R/2) {
-                return true;
-            } else {
-                return false;
-            }
+            return (y >= x - R/2);
         }
     }
-
-
-    }
+}
