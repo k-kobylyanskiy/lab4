@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 public class Field extends JPanel implements Runnable {
@@ -10,15 +11,26 @@ public class Field extends JPanel implements Runnable {
     int radiusPointAnimation = 10;
 
     public void run(){
-        for (int i = 1; i < 11; i++){
+        for (int i = 1; i < 15; i++){
             radiusPointAnimation = i;
             try{
                 repaint();
-                Thread.sleep(80);
+                Thread.sleep(20);
             } catch (InterruptedException e){
 
             }
         }
+
+        for (int i = 15; i > 9; i--){
+            radiusPointAnimation = i;
+            try{
+                repaint();
+                Thread.sleep(20);
+            } catch (InterruptedException e){
+
+            }
+        }
+
     }
 
     private ArrayList<Point> pointArrayList;
@@ -54,58 +66,64 @@ public class Field extends JPanel implements Runnable {
         g.drawLine(570, 295, 570, 305);
 
 
+        boolean animation = false;
         if(!pointArrayList.isEmpty()) {
 
             for(Point point: pointArrayList) {
 
                 boolean wasIn = false;
-                boolean animation = false;
 
-                if(point.getPixel_x() > 135 && point.getPixel_x() < 300 &&
-                        point.getPixel_y() > 30 && point.getPixel_y() < 300){
+                if(Forma.isInside(point.getX(), point.getY(), (float)point.getPreviousR())){
                     wasIn = true;
-                    System.out.println("YEEEEA " + point.getPixel_x());
+                    System.out.println("точка была в области");
                 }
 
-                if(point.getPixel_x() * point.getPixel_x() +
-                        point.getPixel_y() * point.getPixel_y() < 135*135 &&
-                        point.getPixel_x() > 135 && point.getPixel_x() < 300 &&
-                        point.getPixel_y() > 300 && point.getPixel_y() < 435){
-                    wasIn = true;
+                point.setPixel_x((int) (300 + 270 * point.getX() / MainWindow.getR()));
+                point.setPixel_y((int) (300 - 270 * point.getY() / MainWindow.getR()));
+
+
+                point.setReal_x(point.getX() / MainWindow.getR());
+                point.setReal_y(point.getY() / MainWindow.getR());
+
+                // если точка не в области и wasIn был установлен, то запуск анимации
+
+                if (!Forma.isInside(point.getX(), point.getY(), MainWindow.getR()) && wasIn) {
+                    animation = true;
+                    System.out.println(2);
                 }
 
-                if(point.getPixel_x() > 300 && point.getPixel_x() < 435 &&
-                        point.getPixel_y() > 300 && point.getPixel_y() < 435 &&
-                        point.getPixel_y() > point.getPixel_x() - 135){
-                    wasIn = true;
-                }
-
-
-                point.setPixel_x((int)(300 + 270 * point.getX() / MainWindow.getR()));
-                point.setPixel_y((int)(300 - 270 * point.getY() / MainWindow.getR()));
-
-                if(!(point.getPixel_x() > 135 && point.getPixel_x() < 300 &&
-                        point.getPixel_y() > 30 && point.getPixel_y() < 300) && wasIn){
+                if (!(point.getX() * point.getX() +
+                        point.getY() * point.getY() < 135 * 135 &&
+                        point.getPixel_x() > 165 && point.getPixel_x() < 300 &&
+                        point.getPixel_y() > 300 && point.getPixel_y() < 435) && wasIn) {
                     animation = true;
                 }
 
-                if (animation) {
-
-                    g.setColor(Color.RED);
-                    if (Forma.isInside(point.getX(), point.getY(), MainWindow.getR()))
-                        g.setColor(Color.GREEN);
-                    g.fillOval(point.getPixel_x() - radiusPointAnimation / 2, point.getPixel_y() - radiusPointAnimation / 2, radiusPointAnimation, radiusPointAnimation);
-                } else {
-                    g.setColor(Color.RED);
-                    if (Forma.isInside(point.getX(), point.getY(), MainWindow.getR()))
-                        g.setColor(Color.GREEN);
-                    g.fillOval(point.getPixel_x() - 5, point.getPixel_y() - 5, 10, 10);
+                if (!(point.getPixel_x() > 300 && point.getPixel_x() < 435 &&
+                        point.getPixel_y() > 300 && point.getPixel_y() < 435 &&
+                        point.getPixel_y() > point.getPixel_x() - 135) && wasIn) {
+                    animation = true;
                 }
             }
+
+                for(Point point: pointArrayList) {
+                    if (animation) {
+                        g.setColor(Color.RED);
+                        if (Forma.isInside(point.getX(), point.getY(), MainWindow.getR()))
+                            g.setColor(Color.GREEN);
+                        g.fillOval(point.getPixel_x() - radiusPointAnimation / 2, point.getPixel_y() - radiusPointAnimation / 2, radiusPointAnimation, radiusPointAnimation);
+                    } else {
+                        g.setColor(Color.RED);
+                        if (Forma.isInside(point.getX(), point.getY(), MainWindow.getR()))
+                            g.setColor(Color.GREEN);
+                        g.fillOval(point.getPixel_x() - 5, point.getPixel_y() - 5, 10, 10);
+                    }
+                }
         }
     }
 
     public void changeR(){
+
         try {
             if(t.isAlive()){
                 t.stop();
@@ -165,7 +183,7 @@ public class Field extends JPanel implements Runnable {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                point = new Point(e.getX(), e.getY());
+                point = new Point(e.getX(), e.getY(), MainWindow.getR());
                 addPoint(point);
                 coordinates.setText("(" + point.getX() + ";" + point.getY() + ")");
             }

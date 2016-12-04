@@ -27,7 +27,7 @@ public class MainWindow {
         mainWindow = new JFrame("Лабораторная работа №4");
         mainWindow.setSize(800, 600);
         mainWindow.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        mainWindow.setResizable(false);
+        mainWindow.setResizable(true);
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel menu = new JPanel(new GridLayout(14, 1));
@@ -68,7 +68,7 @@ public class MainWindow {
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                elements.radioButtons.stream().filter(jRadioButton -> jRadioButton.isSelected()).forEach(jRadioButton -> field.addPoint(new Point(300 + 270 / MainWindow.getR() * Integer.parseInt(elements.x_coordinate.getSelectedItem().toString()), (300 - Integer.parseInt(jRadioButton.getLabel())*270/MainWindow.getR()))));
+                elements.radioButtons.stream().filter(jRadioButton -> jRadioButton.isSelected()).forEach(jRadioButton -> field.addPoint(new Point(300 + 270 / MainWindow.getR() * Integer.parseInt(elements.x_coordinate.getSelectedItem().toString()), (300 - Integer.parseInt(jRadioButton.getLabel())*270/MainWindow.getR()), MainWindow.getR())));
             }
         });
         clear = new JButton("Clear");
