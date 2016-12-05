@@ -16,23 +16,39 @@ public class MainWindow {
     public JButton clear;
     public Elements elements;
 
+    private int minWidth = 800;
+    private int minHeight = 600;
+
     MainWindow(){
         buildGUI();
     }
 
+    private JFrame initializeMainWindow(JFrame mainWindow){
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+
+        mainWindow.setSize((int)width, (int)height);
+        mainWindow.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        mainWindow.setResizable(true);
+        mainWindow.setMinimumSize(new Dimension(minWidth, minHeight));
+        mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        return mainWindow;
+    }
+
+
     private void buildGUI(){
+
         x_label = new JLabel("Выберите координату х: ");
         y_label = new JLabel("Выберите координату y: ");
 
         mainWindow = new JFrame("Лабораторная работа №4");
-        mainWindow.setSize(800, 600);
-        mainWindow.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        mainWindow.setResizable(true);
-        mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainWindow = initializeMainWindow(mainWindow);
 
         JPanel menu = new JPanel(new GridLayout(14, 1));
         menu.setPreferredSize(new Dimension(200, 600));
-
 
         // Field place
 
@@ -40,7 +56,6 @@ public class MainWindow {
         field.setPreferredSize(new Dimension(600, 600));
         field.setBackground(Color.decode("#F0E68C"));
         field.setLayout(null);
-
 
         JPanel x_coordinates = new JPanel(new GridLayout(2,1));
         JPanel y_coordinates = new JPanel(new GridLayout(1,5));

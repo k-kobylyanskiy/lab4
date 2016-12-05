@@ -5,16 +5,25 @@ public class Point {
     private float real_x;
     private float real_y;
 
+    private int R;
     private int previousR;
 
     Point(int x, int y, int r){
         this.pixel_x = x;
         this.pixel_y = y;
 
-        previousR = r;
+        R = r;
 
         real_x = (float)(x-300)*MainWindow.getR()/270;
         real_y = (float)(300-y)*MainWindow.getR()/270;
+    }
+
+    public void setR(int r){
+        R = r;
+    }
+
+    public int getR(){
+        return R;
     }
 
     public void setPixel_x(int newX){
@@ -33,11 +42,11 @@ public class Point {
         return pixel_y;
     }
 
-    public void setReal_x(float newX){
+    public void setX(float newX){
         real_x = newX;
     }
 
-    public void setReal_y(float newY){
+    public void setY(float newY){
         real_y = newY;
     }
     public int getPreviousR() {

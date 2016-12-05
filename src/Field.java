@@ -11,6 +11,7 @@ public class Field extends JPanel implements Runnable {
     int radiusPointAnimation = 10;
 
     public void run(){
+        System.out.println(123);
         for (int i = 1; i < 15; i++){
             radiusPointAnimation = i;
             try{
@@ -73,36 +74,17 @@ public class Field extends JPanel implements Runnable {
 
                 boolean wasIn = false;
 
-                if(Forma.isInside(point.getX(), point.getY(), (float)point.getPreviousR())){
+                if(Forma.isInside(point.getX(), point.getY(), (float)point.getR())){
                     wasIn = true;
-                    System.out.println("точка была в области");
+                    System.out.println("прошлый радиус " + point.getPreviousR());
+                    System.out.println("радиус " + MainWindow.getR());
                 }
-
-                point.setPixel_x((int) (300 + 270 * point.getX() / MainWindow.getR()));
-                point.setPixel_y((int) (300 - 270 * point.getY() / MainWindow.getR()));
-
-
-                point.setReal_x(point.getX() / MainWindow.getR());
-                point.setReal_y(point.getY() / MainWindow.getR());
 
                 // если точка не в области и wasIn был установлен, то запуск анимации
 
                 if (!Forma.isInside(point.getX(), point.getY(), MainWindow.getR()) && wasIn) {
                     animation = true;
                     System.out.println(2);
-                }
-
-                if (!(point.getX() * point.getX() +
-                        point.getY() * point.getY() < 135 * 135 &&
-                        point.getPixel_x() > 165 && point.getPixel_x() < 300 &&
-                        point.getPixel_y() > 300 && point.getPixel_y() < 435) && wasIn) {
-                    animation = true;
-                }
-
-                if (!(point.getPixel_x() > 300 && point.getPixel_x() < 435 &&
-                        point.getPixel_y() > 300 && point.getPixel_y() < 435 &&
-                        point.getPixel_y() > point.getPixel_x() - 135) && wasIn) {
-                    animation = true;
                 }
             }
 
@@ -124,6 +106,11 @@ public class Field extends JPanel implements Runnable {
 
     public void changeR(){
 
+        for (Point point: pointArrayList){
+            point.setPixel_x((int) (300 + 270 * point.getX() / MainWindow.getR()));
+            point.setPixel_y((int) (300 - 270 * point.getY() / MainWindow.getR()));
+        }
+
         try {
             if(t.isAlive()){
                 t.stop();
@@ -133,6 +120,10 @@ public class Field extends JPanel implements Runnable {
         }
         t = new Thread(this);
         t.start();
+
+        for (Point point: pointArrayList){
+            point.setPreviousR(MainWindow.getR());
+        }
     }
 
     public void addPoint(Point p){
@@ -147,33 +138,7 @@ public class Field extends JPanel implements Runnable {
 
     Field(){
 
-        rLabels = new ArrayList<>();
-
-        r1 = new JLabel("-R");
-        r1.setLocation(25,270);
-        r1.setSize(40,25);
-
-        r2 = new JLabel("-R");
-        r2.setLocation(315, 557);
-        r2.setSize(40,25);
-
-        r4 = new JLabel("R");
-        r4.setLocation(315,17);
-        r4.setSize(40,25);
-
-        r3 = new JLabel("R");
-        r3.setLocation(565, 270);
-        r3.setSize(40,25);
-
-        rLabels.add(r1);
-        rLabels.add(r2);
-        rLabels.add(r3);
-        rLabels.add(r4);
-
-        this.add(r1);
-        this.add(r2);
-        this.add(r3);
-        this.add(r4);
+        addAxis();
 
         coordinates = new JLabel("(0;0)");
         this.add(coordinates);
@@ -184,8 +149,8 @@ public class Field extends JPanel implements Runnable {
             @Override
             public void mouseClicked(MouseEvent e) {
                 point = new Point(e.getX(), e.getY(), MainWindow.getR());
-                addPoint(point);
                 coordinates.setText("(" + point.getX() + ";" + point.getY() + ")");
+                addPoint(point);
             }
 
             @Override
@@ -208,6 +173,31 @@ public class Field extends JPanel implements Runnable {
 
             }
         });
-        repaint();
     }
+
+    private void addAxis(){
+        rLabels = new ArrayList<>();
+
+        r1 = new JLabel("-R");
+        r1.setLocation(25,270);
+        r1.setSize(40,25);
+
+        r2 = new JLabel("-R");
+        r2.setLocation(315, 557);
+        r2.setSize(40,25);
+
+        r4 = new JLabel("R");
+        r4.setLocation(315,17);
+        r4.setSize(40,25);
+
+        r3 = new JLabel("R");
+        r3.setLocation(565, 270);
+        r3.setSize(40,25);
+
+        this.add(r1);
+        this.add(r2);
+        this.add(r3);
+        this.add(r4);
+    }
+
 }
