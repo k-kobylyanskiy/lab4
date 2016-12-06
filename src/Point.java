@@ -14,8 +14,8 @@ public class Point {
 
         R = r;
 
-        real_x = (float)(x-300)*MainWindow.getR()/270;
-        real_y = (float)(300-y)*MainWindow.getR()/270;
+        real_x = (float)(x-(int)(MainWindow.fieldSize/2))*MainWindow.getR()/(int)(MainWindow.fieldSize/2.2222);
+        real_y = (float)((int)(MainWindow.fieldSize/2)-y)*MainWindow.getR()/(int)(MainWindow.fieldSize/2.2222);
     }
 
     public void setR(int r){

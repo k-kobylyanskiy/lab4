@@ -2,22 +2,29 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class MainWindow {
 
     public JFrame mainWindow;
     public JLabel x_label;
     public JLabel y_label;
-    public Field field;
+    public Field field = new Field();
     public static JSpinner spinner;
     public JButton add;
     public JButton clear;
     public Elements elements;
 
-    private int minWidth = 800;
-    private int minHeight = 600;
+    private double width;
+    private double height;
+
+    private int minWidth;
+    private int minHeight;
+
+    private int menuWidth;
+    private int menuHeight;
+
+    public static Integer fieldSize;
 
     MainWindow(){
         buildGUI();
@@ -26,10 +33,17 @@ public class MainWindow {
     private JFrame initializeMainWindow(JFrame mainWindow){
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double width = screenSize.getWidth();
-        double height = screenSize.getHeight();
+        width = screenSize.getWidth();
+        height = screenSize.getHeight();
 
-        mainWindow.setSize((int)width, (int)height);
+        minWidth = (int)(width/1.7);
+        minHeight = (int)(height/1.28);
+
+        menuWidth = (int)(width/6.83);
+        menuHeight =(int)(height/1.28);
+
+        mainWindow.setSize(minWidth, minHeight);
+        fieldSize = mainWindow.getHeight();
         mainWindow.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         mainWindow.setResizable(true);
         mainWindow.setMinimumSize(new Dimension(minWidth, minHeight));
@@ -38,6 +52,10 @@ public class MainWindow {
         return mainWindow;
     }
 
+
+    public void paintComponent(Graphics g){
+        System.out.println("dfsghg");
+    }
 
     private void buildGUI(){
 
@@ -48,12 +66,16 @@ public class MainWindow {
         mainWindow = initializeMainWindow(mainWindow);
 
         JPanel menu = new JPanel(new GridLayout(14, 1));
-        menu.setPreferredSize(new Dimension(200, 600));
+        menu.setPreferredSize(new Dimension(menuWidth, menuHeight));
 
         // Field place
 
-        field = new Field();
-        field.setPreferredSize(new Dimension(600, 600));
+        System.out.println("init field");
+
+        //field = new Field();
+
+        System.out.println(fieldSize);
+        field.setPreferredSize(new Dimension(fieldSize, fieldSize));
         field.setBackground(Color.decode("#F0E68C"));
         field.setLayout(null);
 
@@ -100,6 +122,37 @@ public class MainWindow {
         mainWindow.add(menu);
         mainWindow.add(field);
         mainWindow.setVisible(true);
+
+        mainWindow.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                fieldSize = mainWindow.getHeight();
+                field.repaint();
+                System.out.println(fieldSize);
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                fieldSize = mainWindow.getHeight();
+                field.repaint();
+                System.out.println(fieldSize);
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                fieldSize = mainWindow.getHeight();
+                field.repaint();
+                System.out.println(fieldSize);
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                fieldSize = mainWindow.getHeight();
+                field.repaint();
+                System.out.println(fieldSize);
+            }
+        });
+
     }
 
     public static int getR(){

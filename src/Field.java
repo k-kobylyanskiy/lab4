@@ -11,7 +11,6 @@ public class Field extends JPanel implements Runnable {
     int radiusPointAnimation = 10;
 
     public void run(){
-        System.out.println(123);
         for (int i = 1; i < 15; i++){
             radiusPointAnimation = i;
             try{
@@ -47,24 +46,36 @@ public class Field extends JPanel implements Runnable {
     private Point point;
 
     public void paintComponent(Graphics g){
+
+        this.setPreferredSize(new Dimension(MainWindow.fieldSize, MainWindow.fieldSize));
+
+
+        System.out.println("qwer");
+
+
+        Graphics2D g2 = (Graphics2D)g;
+        BasicStroke pen1 = new BasicStroke(3);
+        g2.setStroke(pen1);
+
         super.paintComponent(g);
-        int[] xPoints = {300, 300, 435};
-        int[] yPoints = {435, 300, 300};
+        int[] xPoints = {MainWindow.fieldSize/2, MainWindow.fieldSize/2, (int)(MainWindow.fieldSize/1.38)};
+        int[] yPoints = {(int)(MainWindow.fieldSize/1.38), MainWindow.fieldSize/2, MainWindow.fieldSize/2};
         g.fillPolygon(xPoints, yPoints, 3);
 
-        g.fillRect(165, 30, 135, 270);
-        g.fillArc(165, 165, 270, 270, 180, 90);
+        g.fillRect((int)(MainWindow.fieldSize/3.6363636), (int)MainWindow.fieldSize/20, (int)(MainWindow.fieldSize/4.444444), (int)(MainWindow.fieldSize/2.222222));
+        g.fillArc((int)(MainWindow.fieldSize/3.6364), (int)(MainWindow.fieldSize/3.6364), (int)(MainWindow.fieldSize/2.2222),(int)(MainWindow.fieldSize/2.2222), 180, 90);
 
         // drawing axis
-        g.drawLine(0,300,600,300);
-        g.drawLine(300,0,300,600);
+        g2.drawLine(0,MainWindow.fieldSize/2,MainWindow.fieldSize,MainWindow.fieldSize/2);
+        g2.drawLine(MainWindow.fieldSize/2,0,MainWindow.fieldSize/2,MainWindow.fieldSize);
+
 
 
         // add R labels
-        g.drawLine(295, 30, 305, 30);
-        g.drawLine(30, 305, 30, 295);
-        g.drawLine(295, 570, 305, 570);
-        g.drawLine(570, 295, 570, 305);
+        g2.drawLine((int)(MainWindow.fieldSize/2.0339), MainWindow.fieldSize/20, (int)(MainWindow.fieldSize/1.9672), MainWindow.fieldSize/20);
+        g2.drawLine(MainWindow.fieldSize/20, (int)(MainWindow.fieldSize/1.9672), MainWindow.fieldSize/20, (int)(MainWindow.fieldSize/2.0339));
+        g2.drawLine((int)(MainWindow.fieldSize/2.0339), (int)(MainWindow.fieldSize/1.05263),(int)(MainWindow.fieldSize/1.9672), (int)(MainWindow.fieldSize/1.05263));
+        g2.drawLine((int)(MainWindow.fieldSize/1.05263), (int)(MainWindow.fieldSize/2.0339), (int)(MainWindow.fieldSize/1.05263), (int)(MainWindow.fieldSize/1.9672));
 
 
         boolean animation = false;
@@ -107,8 +118,8 @@ public class Field extends JPanel implements Runnable {
     public void changeR(){
 
         for (Point point: pointArrayList){
-            point.setPixel_x((int) (300 + 270 * point.getX() / MainWindow.getR()));
-            point.setPixel_y((int) (300 - 270 * point.getY() / MainWindow.getR()));
+            point.setPixel_x((int) ((int)(MainWindow.fieldSize/2) + (int)(MainWindow.fieldSize/2.2222) * point.getX() / MainWindow.getR()));
+            point.setPixel_y((int) ((int)(MainWindow.fieldSize/2) - (int)(MainWindow.fieldSize/2.2222) * point.getY() / MainWindow.getR()));
         }
 
         try {
@@ -138,7 +149,7 @@ public class Field extends JPanel implements Runnable {
 
     Field(){
 
-        addAxis();
+        //addAxis();
 
         coordinates = new JLabel("(0;0)");
         this.add(coordinates);
@@ -179,7 +190,7 @@ public class Field extends JPanel implements Runnable {
         rLabels = new ArrayList<>();
 
         r1 = new JLabel("-R");
-        r1.setLocation(25,270);
+        r1.setLocation((int)(MainWindow.fieldSize/1.05263),270);
         r1.setSize(40,25);
 
         r2 = new JLabel("-R");
