@@ -56,23 +56,10 @@ public class MainWindow {
 
         x_label = new JLabel("Выберите координату х: ");
         y_label = new JLabel("Выберите координату y: ");
-
         mainWindow = new JFrame("Лабораторная работа №4");
 
-
-        System.out.println("menu height " + menuHeight);
-
         mainWindow = initializeMainWindow(mainWindow);
-
         Menu menu = new Menu(new GridLayout(14, 1));
-
-        // Field place
-
-        System.out.println("init field");
-
-        //field = new Field();
-
-        System.out.println(fieldSize);
         field.setPreferredSize(new Dimension(fieldSize, fieldSize));
         field.setBackground(Color.decode("#F0E68C"));
         field.setLayout(null);
@@ -89,7 +76,6 @@ public class MainWindow {
         });
 
         elements = new Elements();
-
         x_coordinates.add(x_label);
         x_coordinates.add(elements.x_coordinate);
         elements.radioButtons.stream().forEach(t -> y_coordinates.add(t));
@@ -127,6 +113,7 @@ public class MainWindow {
                 fieldSize = Math.min(mainWindow.getHeight(), mainWindow.getWidth() - menuWidth - 2);
                 field.repaint();
                 menu.repaint();
+                field.recalculate();
             }
 
             @Override

@@ -5,7 +5,18 @@ import java.awt.event.MouseListener;
 import java.text.Normalizer;
 import java.util.ArrayList;
 
+
+
+
 public class Field extends JPanel implements Runnable {
+
+    public void recalculate(){
+        for(Point point: pointArrayList) {
+            point.setPixel_x((int)((MainWindow.fieldSize)*point.getX()/MainWindow.getR()/2.2222 + MainWindow.fieldSize/2));
+            point.setPixel_y((int)((MainWindow.fieldSize/2 - (MainWindow.fieldSize)*point.getY()/MainWindow.getR()/2.2222)));
+            System.out.println(point.getPixel_y());
+        }
+    }
 
     Thread t;
     int radiusPointAnimation = 10;
@@ -49,10 +60,6 @@ public class Field extends JPanel implements Runnable {
 
         this.setPreferredSize(new Dimension(MainWindow.fieldSize, MainWindow.fieldSize));
 
-
-        System.out.println("qwer");
-
-
         Graphics2D g2 = (Graphics2D)g;
         BasicStroke pen1 = new BasicStroke(3);
         g2.setStroke(pen1);
@@ -69,35 +76,30 @@ public class Field extends JPanel implements Runnable {
         g2.drawLine(0,MainWindow.fieldSize/2,MainWindow.fieldSize,MainWindow.fieldSize/2);
         g2.drawLine(MainWindow.fieldSize/2,0,MainWindow.fieldSize/2,MainWindow.fieldSize);
 
-
-
         // add R labels
         g2.drawLine((int)(MainWindow.fieldSize/2.0339), MainWindow.fieldSize/20, (int)(MainWindow.fieldSize/1.9672), MainWindow.fieldSize/20);
         g2.drawLine(MainWindow.fieldSize/20, (int)(MainWindow.fieldSize/1.9672), MainWindow.fieldSize/20, (int)(MainWindow.fieldSize/2.0339));
         g2.drawLine((int)(MainWindow.fieldSize/2.0339), (int)(MainWindow.fieldSize/1.05263),(int)(MainWindow.fieldSize/1.9672), (int)(MainWindow.fieldSize/1.05263));
         g2.drawLine((int)(MainWindow.fieldSize/1.05263), (int)(MainWindow.fieldSize/2.0339), (int)(MainWindow.fieldSize/1.05263), (int)(MainWindow.fieldSize/1.9672));
 
-
         boolean animation = false;
         if(!pointArrayList.isEmpty()) {
 
             for(Point point: pointArrayList) {
 
-                boolean wasIn = false;
-
-                if(Forma.isInside(point.getX(), point.getY(), (float)point.getR())){
-                    wasIn = true;
-                    System.out.println("прошлый радиус " + point.getPreviousR());
-                    System.out.println("радиус " + MainWindow.getR());
-                }
-
                 // если точка не в области и wasIn был установлен, то запуск анимации
 
-                if (!Forma.isInside(point.getX(), point.getY(), MainWindow.getR()) && wasIn) {
+                if (!Forma.isInside(point.getX(), point.getY(), MainWindow.getR()) && point.wasIn) {
+                    System.out.println(12345);
                     animation = true;
-                    System.out.println(2);
+                    break;
                 }
+
+                point.setR(MainWindow.getR());
+                point.setWasIn();
             }
+
+            System.out.println(animation);
 
                 for(Point point: pointArrayList) {
                     if (animation) {

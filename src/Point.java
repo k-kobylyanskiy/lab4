@@ -8,6 +8,8 @@ public class Point {
     private int R;
     private int previousR;
 
+    public boolean wasIn;
+
     Point(int x, int y, int r){
         this.pixel_x = x;
         this.pixel_y = y;
@@ -16,6 +18,12 @@ public class Point {
 
         real_x = (float)(x-(int)(MainWindow.fieldSize/2))*MainWindow.getR()/(int)(MainWindow.fieldSize/2.2222);
         real_y = (float)((int)(MainWindow.fieldSize/2)-y)*MainWindow.getR()/(int)(MainWindow.fieldSize/2.2222);
+
+        setWasIn();
+    }
+
+    public void setWasIn(){
+        wasIn = Forma.isInside(real_x, real_y, R);
     }
 
     public void setR(int r){
