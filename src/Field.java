@@ -90,7 +90,6 @@ public class Field extends JPanel implements Runnable {
                 // если точка не в области и wasIn был установлен, то запуск анимации
 
                 if (!Forma.isInside(point.getX(), point.getY(), MainWindow.getR()) && point.wasIn) {
-                    System.out.println(12345);
                     animation = true;
                     break;
                 }
