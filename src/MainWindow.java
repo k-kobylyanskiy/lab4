@@ -21,8 +21,8 @@ public class MainWindow {
     private int minWidth;
     private int minHeight;
 
-    private int menuWidth;
-    private int menuHeight;
+    public static int menuWidth;
+    public static int menuHeight;
 
     public static Integer fieldSize;
 
@@ -36,14 +36,14 @@ public class MainWindow {
         width = screenSize.getWidth();
         height = screenSize.getHeight();
 
-        minWidth = (int)(width/1.7);
+        minWidth = (int)(width/1.7075);
         minHeight = (int)(height/1.28);
 
         menuWidth = (int)(width/6.83);
-        menuHeight =(int)(height/1.28);
+        menuHeight = minHeight;
 
         mainWindow.setSize(minWidth, minHeight);
-        fieldSize = mainWindow.getHeight();
+        fieldSize = Math.min(mainWindow.getHeight(), mainWindow.getWidth() - menuWidth);
         mainWindow.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         mainWindow.setResizable(true);
         mainWindow.setMinimumSize(new Dimension(minWidth, minHeight));
@@ -52,21 +52,19 @@ public class MainWindow {
         return mainWindow;
     }
 
-
-    public void paintComponent(Graphics g){
-        System.out.println("dfsghg");
-    }
-
     private void buildGUI(){
 
         x_label = new JLabel("Выберите координату х: ");
         y_label = new JLabel("Выберите координату y: ");
 
         mainWindow = new JFrame("Лабораторная работа №4");
+
+
+        System.out.println("menu height " + menuHeight);
+
         mainWindow = initializeMainWindow(mainWindow);
 
-        JPanel menu = new JPanel(new GridLayout(14, 1));
-        menu.setPreferredSize(new Dimension(menuWidth, menuHeight));
+        Menu menu = new Menu(new GridLayout(14, 1));
 
         // Field place
 
@@ -126,16 +124,13 @@ public class MainWindow {
         mainWindow.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-                fieldSize = mainWindow.getHeight();
+                fieldSize = Math.min(mainWindow.getHeight(), mainWindow.getWidth() - menuWidth - 2);
                 field.repaint();
-                System.out.println(fieldSize);
+                menu.repaint();
             }
 
             @Override
             public void componentMoved(ComponentEvent e) {
-                fieldSize = mainWindow.getHeight();
-                field.repaint();
-                System.out.println(fieldSize);
             }
 
             @Override
