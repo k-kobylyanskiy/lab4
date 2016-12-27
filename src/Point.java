@@ -6,7 +6,6 @@ public class Point {
     private float real_y;
 
     private int R;
-    private int previousR;
 
     public boolean wasIn;
 
@@ -16,8 +15,8 @@ public class Point {
 
         R = r;
 
-        real_x = (float)(x-(int)(MainWindow.fieldSize/2))*MainWindow.getR()/(int)(MainWindow.fieldSize/2.2222);
-        real_y = (float)((int)(MainWindow.fieldSize/2)-y)*MainWindow.getR()/(int)(MainWindow.fieldSize/2.2222);
+        real_x = (float)(x-(MainWindow.fieldSize/2))*MainWindow.getR()/(int)(MainWindow.fieldSize/2.2222);
+        real_y = (float)((MainWindow.fieldSize/2)-y)*MainWindow.getR()/(int)(MainWindow.fieldSize/2.2222);
 
         setWasIn();
     }
@@ -28,10 +27,6 @@ public class Point {
 
     public void setR(int r){
         R = r;
-    }
-
-    public int getR(){
-        return R;
     }
 
     public void setPixel_x(int newX){
@@ -48,21 +43,6 @@ public class Point {
 
     public int getPixel_y(){
         return pixel_y;
-    }
-
-    public void setX(float newX){
-        real_x = newX;
-    }
-
-    public void setY(float newY){
-        real_y = newY;
-    }
-    public int getPreviousR() {
-        return previousR;
-    }
-
-    public void setPreviousR(int r) {
-        previousR = r;
     }
 
     public float getX(){

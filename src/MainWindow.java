@@ -56,7 +56,7 @@ public class MainWindow {
 
         x_label = new JLabel("Выберите координату х: ");
         y_label = new JLabel("Выберите координату y: ");
-        mainWindow = new JFrame("Лабораторная работа №4");
+        mainWindow = new JFrame("Лабораторная работа №5");
 
         mainWindow = initializeMainWindow(mainWindow);
         Menu menu = new Menu(new GridLayout(14, 1));
@@ -89,7 +89,7 @@ public class MainWindow {
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                elements.radioButtons.stream().filter(jRadioButton -> jRadioButton.isSelected()).forEach(jRadioButton -> field.addPoint(new Point(300 + 270 / MainWindow.getR() * Integer.parseInt(elements.x_coordinate.getSelectedItem().toString()), (300 - Integer.parseInt(jRadioButton.getLabel())*270/MainWindow.getR()), MainWindow.getR())));
+                elements.radioButtons.stream().filter(jRadioButton -> jRadioButton.isSelected()).forEach(jRadioButton -> field.addPoint(new Point(MainWindow.fieldSize/2 + (int)(MainWindow.fieldSize/2.2222) / MainWindow.getR() * Integer.parseInt(elements.x_coordinate.getSelectedItem().toString()), (MainWindow.fieldSize/2 - Integer.parseInt(jRadioButton.getLabel())*(int)(MainWindow.fieldSize/2.2222)/MainWindow.getR()), MainWindow.getR())));
             }
         });
         clear = new JButton("Clear");

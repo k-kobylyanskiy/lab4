@@ -2,10 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.text.Normalizer;
+import java.io.IOException;
 import java.util.ArrayList;
-
-
 
 
 public class Field extends JPanel implements Runnable {
@@ -56,7 +54,7 @@ public class Field extends JPanel implements Runnable {
 
     private Point point;
 
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
 
         this.setPreferredSize(new Dimension(MainWindow.fieldSize, MainWindow.fieldSize));
 
@@ -65,12 +63,12 @@ public class Field extends JPanel implements Runnable {
         g2.setStroke(pen1);
 
         super.paintComponent(g);
-        int[] xPoints = {MainWindow.fieldSize/2, MainWindow.fieldSize/2, (int)(MainWindow.fieldSize/1.38)};
+        int[] xPoints = {MainWindow.fieldSize/2, MainWindow.fieldSize/2, (int)(MainWindow.fieldSize/20)};
         int[] yPoints = {(int)(MainWindow.fieldSize/1.38), MainWindow.fieldSize/2, MainWindow.fieldSize/2};
         g.fillPolygon(xPoints, yPoints, 3);
 
-        g.fillRect((int)(MainWindow.fieldSize/3.6363636), (int)MainWindow.fieldSize/20, (int)(MainWindow.fieldSize/4.444444), (int)(MainWindow.fieldSize/2.222222));
-        g.fillArc((int)(MainWindow.fieldSize/3.6364), (int)(MainWindow.fieldSize/3.6364), (int)(MainWindow.fieldSize/2.2222),(int)(MainWindow.fieldSize/2.2222), 180, 90);
+        g.fillRect((int)(MainWindow.fieldSize/3.6363636), MainWindow.fieldSize/20, (int)(MainWindow.fieldSize/4.444444), (int)(MainWindow.fieldSize/2.222222));
+        g.fillArc((int)(MainWindow.fieldSize/3.6364), (int)(MainWindow.fieldSize/3.6364), (int)(MainWindow.fieldSize/2.2222),(int)(MainWindow.fieldSize/2.2222), 270, 90);
 
         // drawing axis
         g2.drawLine(0,MainWindow.fieldSize/2,MainWindow.fieldSize,MainWindow.fieldSize/2);
@@ -82,17 +80,26 @@ public class Field extends JPanel implements Runnable {
         g2.drawLine((int)(MainWindow.fieldSize/2.0339), (int)(MainWindow.fieldSize/1.05263),(int)(MainWindow.fieldSize/1.9672), (int)(MainWindow.fieldSize/1.05263));
         g2.drawLine((int)(MainWindow.fieldSize/1.05263), (int)(MainWindow.fieldSize/2.0339), (int)(MainWindow.fieldSize/1.05263), (int)(MainWindow.fieldSize/1.9672));
 
+
         boolean animation = false;
         if(!pointArrayList.isEmpty()) {
 
+            System.out.println("говно");
             for(Point point: pointArrayList) {
 
-                // если точка не в области и wasIn был установлен, то запуск анимации
+                    System.out.println("говно");
+                    if (CheckPoint.checkPoint(point) == 0 && point.wasIn) {
+                        animation = true;
+                        break;
+                    }
+             //  } catch (IOException e){
+                    //g.setColor(Color.DARK_GRAY);
+                    //for(Point points: pointArrayList) {
+                      //  g.fillOval(points.getPixel_x() - 5, points.getPixel_y() - 5, 10, 10);
+                    //}
+                  //  System.out.println("cannot connect to server");
 
-                if (!Forma.isInside(point.getX(), point.getY(), MainWindow.getR()) && point.wasIn) {
-                    animation = true;
-                    break;
-                }
+               // }
 
                 point.setR(MainWindow.getR());
                 point.setWasIn();
@@ -101,17 +108,29 @@ public class Field extends JPanel implements Runnable {
             System.out.println(animation);
 
                 for(Point point: pointArrayList) {
-                    if (animation) {
-                        g.setColor(Color.RED);
-                        if (Forma.isInside(point.getX(), point.getY(), MainWindow.getR()))
-                            g.setColor(Color.GREEN);
-                        g.fillOval(point.getPixel_x() - radiusPointAnimation / 2, point.getPixel_y() - radiusPointAnimation / 2, radiusPointAnimation, radiusPointAnimation);
-                    } else {
-                        g.setColor(Color.RED);
-                        if (Forma.isInside(point.getX(), point.getY(), MainWindow.getR()))
-                            g.setColor(Color.GREEN);
-                        g.fillOval(point.getPixel_x() - 5, point.getPixel_y() - 5, 10, 10);
-                    }
+                    //try {
+
+                        int result = CheckPoint.checkPoint(point);
+
+                        if (animation) {
+                            g.setColor(Color.RED);
+                            if (result == 1)
+                                g.setColor(Color.GREEN);
+                            g.fillOval(point.getPixel_x() - radiusPointAnimation / 2, point.getPixel_y() - radiusPointAnimation / 2, radiusPointAnimation, radiusPointAnimation);
+                        } else {
+                            g.setColor(Color.RED);
+                            if (result == 1) {
+                                g.setColor(Color.GREEN);
+                            }  else if (result == 3){
+                                g.setColor(Color.YELLOW);
+                            }
+                            g.fillOval(point.getPixel_x() - 5, point.getPixel_y() - 5, 10, 10);
+                        }
+                    //} catch (IOException e) {
+                      //  System.out.println("говно случилось");
+                        //g.setColor(Color.DARK_GRAY);
+                        //g.fillOval(point.getPixel_x() - 5, point.getPixel_y() - 5, 10, 10);
+                    //}
                 }
         }
     }
@@ -119,8 +138,8 @@ public class Field extends JPanel implements Runnable {
     public void changeR(){
 
         for (Point point: pointArrayList){
-            point.setPixel_x((int) ((int)(MainWindow.fieldSize/2) + (int)(MainWindow.fieldSize/2.2222) * point.getX() / MainWindow.getR()));
-            point.setPixel_y((int) ((int)(MainWindow.fieldSize/2) - (int)(MainWindow.fieldSize/2.2222) * point.getY() / MainWindow.getR()));
+            point.setPixel_x((int) ((MainWindow.fieldSize/2) + (int)(MainWindow.fieldSize/2.2222) * point.getX() / MainWindow.getR()));
+            point.setPixel_y((int) ((MainWindow.fieldSize/2) - (int)(MainWindow.fieldSize/2.2222) * point.getY() / MainWindow.getR()));
         }
 
         try {
@@ -131,11 +150,10 @@ public class Field extends JPanel implements Runnable {
 
         }
         t = new Thread(this);
+
+        t.run();
         t.start();
 
-        for (Point point: pointArrayList){
-            point.setPreviousR(MainWindow.getR());
-        }
     }
 
     public void addPoint(Point p){
@@ -211,5 +229,4 @@ public class Field extends JPanel implements Runnable {
         this.add(r3);
         this.add(r4);
     }
-
 }

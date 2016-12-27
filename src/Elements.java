@@ -13,5 +13,4 @@ public class Elements {
             radioButtons.add(new JRadioButton(""+i));
         }
     }
-
 }
