@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -45,13 +44,6 @@ public class Field extends JPanel implements Runnable {
     private ArrayList<Point> pointArrayList;
     private JLabel coordinates;
 
-    private JLabel r1;
-    private JLabel r2;
-    private JLabel r3;
-    private JLabel r4;
-
-    ArrayList<JLabel> rLabels;
-
     private Point point;
 
     public void paintComponent(Graphics g) {
@@ -84,22 +76,12 @@ public class Field extends JPanel implements Runnable {
         boolean animation = false;
         if(!pointArrayList.isEmpty()) {
 
-            System.out.println("говно");
             for(Point point: pointArrayList) {
 
-                    System.out.println("говно");
-                    if (CheckPoint.checkPoint(point) == 0 && point.wasIn) {
-                        animation = true;
-                        break;
-                    }
-             //  } catch (IOException e){
-                    //g.setColor(Color.DARK_GRAY);
-                    //for(Point points: pointArrayList) {
-                      //  g.fillOval(points.getPixel_x() - 5, points.getPixel_y() - 5, 10, 10);
-                    //}
-                  //  System.out.println("cannot connect to server");
-
-               // }
+                if (CheckPoint.checkPoint(point) == 0 && point.wasIn) {
+                    animation = true;
+                    break;
+                }
 
                 point.setR(MainWindow.getR());
                 point.setWasIn();
@@ -108,29 +90,23 @@ public class Field extends JPanel implements Runnable {
             System.out.println(animation);
 
                 for(Point point: pointArrayList) {
-                    //try {
 
-                        int result = CheckPoint.checkPoint(point);
+                    int result = CheckPoint.checkPoint(point);
 
-                        if (animation) {
-                            g.setColor(Color.RED);
-                            if (result == 1)
-                                g.setColor(Color.GREEN);
-                            g.fillOval(point.getPixel_x() - radiusPointAnimation / 2, point.getPixel_y() - radiusPointAnimation / 2, radiusPointAnimation, radiusPointAnimation);
-                        } else {
-                            g.setColor(Color.RED);
-                            if (result == 1) {
-                                g.setColor(Color.GREEN);
-                            }  else if (result == 3){
-                                g.setColor(Color.YELLOW);
-                            }
-                            g.fillOval(point.getPixel_x() - 5, point.getPixel_y() - 5, 10, 10);
+                    if (animation) {
+                        g.setColor(Color.RED);
+                        if (result == 1)
+                            g.setColor(Color.GREEN);
+                        g.fillOval(point.getPixel_x() - radiusPointAnimation / 2, point.getPixel_y() - radiusPointAnimation / 2, radiusPointAnimation, radiusPointAnimation);
+                    } else {
+                        g.setColor(Color.RED);
+                        if (result == 1) {
+                            g.setColor(Color.GREEN);
+                        }  else if (result == 3){
+                            g.setColor(Color.YELLOW);
                         }
-                    //} catch (IOException e) {
-                      //  System.out.println("говно случилось");
-                        //g.setColor(Color.DARK_GRAY);
-                        //g.fillOval(point.getPixel_x() - 5, point.getPixel_y() - 5, 10, 10);
-                    //}
+                        g.fillOval(point.getPixel_x() - 5, point.getPixel_y() - 5, 10, 10);
+                    }
                 }
         }
     }
@@ -168,8 +144,6 @@ public class Field extends JPanel implements Runnable {
 
     Field(){
 
-        //addAxis();
-
         coordinates = new JLabel("(0;0)");
         this.add(coordinates);
         coordinates.setLocation(0,0);
@@ -203,30 +177,5 @@ public class Field extends JPanel implements Runnable {
 
             }
         });
-    }
-
-    private void addAxis(){
-        rLabels = new ArrayList<>();
-
-        r1 = new JLabel("-R");
-        r1.setLocation((int)(MainWindow.fieldSize/1.05263),270);
-        r1.setSize(40,25);
-
-        r2 = new JLabel("-R");
-        r2.setLocation(315, 557);
-        r2.setSize(40,25);
-
-        r4 = new JLabel("R");
-        r4.setLocation(315,17);
-        r4.setSize(40,25);
-
-        r3 = new JLabel("R");
-        r3.setLocation(565, 270);
-        r3.setSize(40,25);
-
-        this.add(r1);
-        this.add(r2);
-        this.add(r3);
-        this.add(r4);
     }
 }
