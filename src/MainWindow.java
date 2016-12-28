@@ -3,6 +3,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 public class MainWindow {
 
@@ -52,11 +53,20 @@ public class MainWindow {
         return mainWindow;
     }
 
+    ResourceBundle res;
+    Locale locale1 = new Locale("en", "US");
+    Locale locale2 = new Locale("pt", "PT");
+
     private void buildGUI(){
 
-        x_label = new JLabel("Выберите координату х: ");
-        y_label = new JLabel("Выберите координату y: ");
-        mainWindow = new JFrame("Лабораторная работа №5");
+        if (Main.locale.equals("en"))
+            res = ResourceBundle.getBundle("res", locale1);
+        else
+            res = ResourceBundle.getBundle("res", locale2);
+
+        x_label = new JLabel(res.getString("x_label"));
+        y_label = new JLabel(res.getString("y_label"));
+        mainWindow = new JFrame(res.getString("frame"));
 
         mainWindow = initializeMainWindow(mainWindow);
         Menu menu = new Menu(new GridLayout(14, 1));
@@ -85,14 +95,16 @@ public class MainWindow {
         menu.add(y_coordinates);
         menu.add(spinner);
 
-        add = new JButton("Add");
+        add = new JButton(res.getString("add"));
+
+
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 elements.radioButtons.stream().filter(jRadioButton -> jRadioButton.isSelected()).forEach(jRadioButton -> field.addPoint(new Point(MainWindow.fieldSize/2 + (int)(MainWindow.fieldSize/2.2222) / MainWindow.getR() * Integer.parseInt(elements.x_coordinate.getSelectedItem().toString()), (MainWindow.fieldSize/2 - Integer.parseInt(jRadioButton.getLabel())*(int)(MainWindow.fieldSize/2.2222)/MainWindow.getR()), MainWindow.getR())));
             }
         });
-        clear = new JButton("Clear");
+        clear = new JButton(res.getString("clear"));
         clear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
